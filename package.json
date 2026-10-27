@@ -1,0 +1,11 @@
+{
+  "name": "voteblockchain",
+  "version": "1.0.0",
+  "description": "Voting app that records votes on a hash-linked blockchain",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "license": "MIT"
+}

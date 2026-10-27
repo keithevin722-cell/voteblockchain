@@ -1,0 +1,28 @@
+<!doctype html>
+<meta charset="utf-8"><title>Blockchain Voting</title>
+<h1>Blockchain Voting</h1>
+<input id="voter" placeholder="Your voter ID">
+<div id="opts"></div>
+<p id="msg"></p>
+<h2>Results</h2><pre id="res"></pre>
+<script>
+async function refresh() {
+  const r = await (await fetch('/api/results')).json();
+  document.getElementById('opts').innerHTML = '';
+  r.options.forEach((o) => {
+    const b = document.createElement('button');
+    b.textContent = 'Vote ' + o;
+    b.onclick = () => vote(o);
+    document.getElementById('opts').appendChild(b);
+  });
+  document.getElementById('res').textContent =
+    JSON.stringify(r.tally, null, 2) + '\nChain valid: ' + r.valid;
+}
+async function vote(option) {
+  const res = await fetch('/api/vote', { method: 'POST', body: JSON.stringify({ voterId: document.getElementById('voter').value, option }) });
+  const j = await res.json();
+  document.getElementById('msg').textContent = res.ok ? 'Vote recorded in block ' + j.index : j.error;
+  refresh();
+}
+refresh();
+</script>
